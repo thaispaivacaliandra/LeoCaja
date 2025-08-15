@@ -2372,6 +2372,738 @@
     padding: 30px 20px;
   }
 }
+
+
+
+        /* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets e dispositivos médios (768px - 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        padding: 0 15px;
+    }
+
+    /* Header */
+    .header-inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .nav-menu {
+        gap: 10px;
+    }
+
+    /* Hero Section */
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .hero-logo {
+        font-size: 6rem;
+    }
+
+    .hero-right iframe {
+        width: 100%;
+        height: 300px;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 15px;
+    }
+
+    .project-item:nth-child(1) {
+        grid-column: 1 / 7;
+        grid-row: 1 / 2;
+    }
+
+    .project-item:nth-child(2) {
+        grid-column: 1 / 4;
+        grid-row: 2 / 3;
+    }
+
+    .project-item:nth-child(3) {
+        grid-column: 4 / 7;
+        grid-row: 2 / 3;
+    }
+
+    .project-item:nth-child(4) {
+        grid-column: 1 / 4;
+        grid-row: 3 / 4;
+    }
+
+    .project-item:nth-child(5) {
+        grid-column: 4 / 7;
+        grid-row: 3 / 4;
+    }
+
+    .project-item:nth-child(6) {
+        grid-column: 1 / 7;
+        grid-row: 4 / 5;
+    }
+
+    /* Services */
+    .services-title,
+    .projects-title {
+        font-size: 2.5rem;
+    }
+
+    /* Stories Carousel */
+    .story-card {
+        flex: 0 0 280px;
+        height: 420px;
+    }
+
+    /* Manifesto */
+    .manifesto-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .manifesto-title {
+        font-size: 2.5rem;
+        text-align: center;
+    }
+
+    /* Contact */
+    .contact-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    /* Services Grid LH */
+    .lh-services-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* Methodology Timeline */
+    .lh-methodology-timeline {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .lh-timeline-content {
+        width: 250px;
+    }
+}
+
+/* Tablets pequenos e celulares grandes (481px - 768px) */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 0 10px;
+    }
+
+    /* Header */
+    header {
+        padding: 20px 0;
+    }
+
+    .header-inner {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .nav-menu {
+        display: none; /* Esconder menu em mobile - implementar hamburger */
+    }
+
+    .contact-btn {
+        padding: 6px 15px;
+        font-size: 0.8rem;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding-top: 80px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .hero-container {
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .hero-logo {
+        font-size: 4rem;
+        margin-bottom: 15px;
+    }
+
+    .hero-tagline {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-text {
+        font-size: 1rem;
+    }
+
+    .hero-right iframe {
+        width: 100%;
+        height: 250px;
+        border-radius: 15px;
+    }
+
+    /* Stories Carousel */
+    .stories-carousel-section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .story-card {
+        flex: 0 0 250px;
+        height: 380px;
+    }
+
+    .story-info {
+        padding: 15px;
+    }
+
+    .story-title {
+        font-size: 1.1rem;
+    }
+
+    .story-desc {
+        font-size: 0.85rem;
+    }
+
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    /* Projects */
+    .projects {
+        padding: 80px 0;
+    }
+
+    .projects-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .projects-subtitle {
+        font-size: 1rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .project-item:nth-child(n) {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .project-media-wrapper {
+        height: 200px;
+    }
+
+    .project-info {
+        padding: 15px;
+    }
+
+    .project-title {
+        font-size: 1.2rem;
+    }
+
+    /* Services */
+    .services {
+        padding: 80px 0;
+    }
+
+    .services-title {
+        font-size: 2rem;
+    }
+
+    .services-description {
+        font-size: 1rem;
+    }
+
+    .service-name {
+        font-size: 1.8rem;
+    }
+
+    /* Services LH */
+    .lh-services {
+        padding: 80px 0;
+    }
+
+    .lh-section-title {
+        font-size: 2rem;
+    }
+
+    .lh-section-desc {
+        font-size: 1rem;
+    }
+
+    .lh-service-card {
+        padding: 25px 20px;
+    }
+
+    .lh-service-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .lh-service-icon i {
+        font-size: 1.5rem;
+    }
+
+    /* Methodology */
+    .lh-methodology {
+        padding: 80px 0;
+    }
+
+    .lh-methodology-timeline {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .lh-timeline-content {
+        width: 100%;
+    }
+
+    .lh-timeline-icon {
+        width: 60px;
+        height: 60px;
+        margin: -40px auto 15px;
+    }
+
+    .lh-methodology-numbers {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .lh-number-value {
+        font-size: 3rem;
+    }
+
+    /* Manifesto */
+    .manifesto {
+        padding: 80px 0;
+    }
+
+    .manifesto-title {
+        font-size: 2rem;
+    }
+
+    .manifesto-text {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    /* CTA */
+    .cta {
+        padding: 80px 0;
+        margin: 0 10px;
+        margin-bottom: 80px;
+    }
+
+    .cta-title {
+        font-size: 2.5rem;
+    }
+
+    .cta-text {
+        font-size: 1rem;
+    }
+
+    /* Contact */
+    .contact {
+        padding: 80px 0;
+    }
+
+    .contact-title {
+        font-size: 1.5rem;
+    }
+
+    .contact-subtitle {
+        font-size: 1rem;
+    }
+
+    /* Footer */
+    footer {
+        padding: 60px 0 30px;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .footer-nav {
+        gap: 20px;
+    }
+
+    .contact-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 1.2rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    /* FAQ */
+    .faq {
+        padding: 80px 0;
+    }
+
+    .faq-title {
+        font-size: 2rem;
+    }
+
+    .faq-question {
+        font-size: 1.1rem;
+    }
+}
+
+/* Celulares (320px - 480px) */
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    /* Header */
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .contact-btn {
+        padding: 5px 12px;
+        font-size: 0.7rem;
+    }
+
+    /* Hero Section */
+    .hero-logo {
+        font-size: 3rem;
+    }
+
+    .hero-tagline {
+        font-size: 0.9rem;
+    }
+
+    .hero-text {
+        font-size: 0.9rem;
+    }
+
+    .hero-right iframe {
+        height: 200px;
+        border-radius: 10px;
+    }
+
+    /* Stories Carousel */
+    .story-card {
+        flex: 0 0 220px;
+        height: 350px;
+    }
+
+    .slider-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .story-play-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    /* Projects */
+    .projects-title {
+        font-size: 1.8rem;
+    }
+
+    .projects-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .project-media-wrapper {
+        height: 180px;
+    }
+
+    .project-info {
+        padding: 12px;
+    }
+
+    .project-title {
+        font-size: 1.1rem;
+    }
+
+    .project-description {
+        font-size: 0.85rem;
+    }
+
+    /* Services */
+    .services-title {
+        font-size: 1.8rem;
+    }
+
+    .service-name {
+        font-size: 1.5rem;
+    }
+
+    /* Services LH */
+    .lh-section-title {
+        font-size: 1.8rem;
+    }
+
+    .lh-section-desc {
+        font-size: 0.9rem;
+    }
+
+    .lh-service-card {
+        padding: 20px 15px;
+    }
+
+    .lh-service-title {
+        font-size: 1.2rem;
+    }
+
+    .lh-service-desc {
+        font-size: 0.9rem;
+    }
+
+    /* Methodology */
+    .lh-timeline-title {
+        font-size: 1rem;
+    }
+
+    .lh-timeline-desc {
+        font-size: 0.85rem;
+    }
+
+    .lh-number-value {
+        font-size: 2.5rem;
+    }
+
+    .lh-number-label {
+        font-size: 0.9rem;
+    }
+
+    /* Manifesto */
+    .manifesto-title {
+        font-size: 1.8rem;
+    }
+
+    .manifesto-text {
+        font-size: 0.9rem;
+    }
+
+    /* CTA */
+    .cta-title {
+        font-size: 2rem;
+    }
+
+    .cta-text {
+        font-size: 0.9rem;
+    }
+
+    .cta-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+
+    /* Contact */
+    .contact-title {
+        font-size: 1.3rem;
+    }
+
+    .contact-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .submit-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+
+    /* Footer */
+    .footer-logo {
+        font-size: 1.5rem;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .contact-circle {
+        width: 70px;
+        height: 70px;
+        font-size: 1rem;
+    }
+
+    /* FAQ */
+    .faq-title {
+        font-size: 1.8rem;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+    }
+
+    .faq-answer {
+        font-size: 0.9rem;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+        width: 45px;
+        height: 45px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Celulares muito pequenos (max 320px) */
+@media (max-width: 320px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .hero-logo {
+        font-size: 2.5rem;
+    }
+
+    .projects-title,
+    .services-title,
+    .manifesto-title,
+    .cta-title {
+        font-size: 1.5rem;
+    }
+
+    .story-card {
+        flex: 0 0 200px;
+        height: 320px;
+    }
+
+    .slider-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .lh-service-card {
+        padding: 15px 10px;
+    }
+
+    .contact-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Orientação paisagem para dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 90vh;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .hero-right iframe {
+        height: 250px;
+    }
+}
+
+/* Ajustes específicos para telas muito largas */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1600px;
+    }
+
+    .hero-logo {
+        font-size: 10rem;
+    }
+
+    .projects-title,
+    .services-title {
+        font-size: 4rem;
+    }
+}
+
+/* Ajustes para modo escuro do sistema */
+@media (prefers-color-scheme: dark) {
+    /* O site já é escuro por padrão, mas podemos adicionar ajustes se necessário */
+}
+
+/* Ajustes para redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .preloader {
+        display: none;
+    }
+}
+
+/* Ajustes para impressão */
+@media print {
+    .preloader,
+    .back-to-top,
+    header,
+    .hero-decorations,
+    .contact-circle,
+    .slider-arrow {
+        display: none !important;
+    }
+
+    body {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+    }
+}
     </style>
 </head>
 <body>
