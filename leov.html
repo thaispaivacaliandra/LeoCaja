@@ -1,0 +1,4151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peak - Onde histórias alcançam o topo</title>
+    <!-- Fontes e Ícones -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ===== BASE E RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        iframe {
+            border: none;
+            border-radius: 30px;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* ===== ANIMAÇÕES ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes scrollLogos {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .animate-slide-right {
+            opacity: 0;
+            animation: slideInRight 0.8s ease forwards;
+        }
+        
+        .animate-slide-left {
+            opacity: 0;
+            animation: slideInLeft 0.8s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        
+        /* ===== PRELOADER ===== */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .preloader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .preloader-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .preloader-logo .dot {
+            color: #e95c33;
+        }
+        
+        .preloader-bar-container {
+            width: 200px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preloader-bar {
+            height: 100%;
+            width: 0;
+            background-color: #e95c33;
+            transition: width 1.5s ease;
+        }
+        
+        /* ===== BOTÃO VOLTAR AO TOPO ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #e95c33;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 900;
+            box-shadow: 0 5px 15px rgba(233, 92, 51, 0.3);
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(233, 92, 51, 0.4);
+        }
+        
+        /* ===== HEADER E NAVEGAÇÃO ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.9);
+            padding: 15px 0;
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: #e95c33;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover:after {
+            width: 80%;
+        }
+        
+        .contact-btn {
+            background-color: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .contact-btn:hover {
+            background-color: #ffffff;
+            color: #0a0a0a;
+        }
+        
+        .arrow-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-btn:hover .arrow-icon {
+            transform: translateX(5px);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            padding-top: 100px;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.2;
+        }
+        
+        .hero-background-dots {
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hero-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            z-index: 2;
+            position: relative;
+            height: 100%;
+        }
+        
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .hero-logo {
+            font-size: 8rem;
+            font-weight: 700;
+            line-height: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .hero-logo .dot {
+            color: #e95c33;
+        }
+        
+        .hero-socials {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .hero-socials a {
+            color: #e95c33;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .hero-socials a:hover {
+            opacity: 0.7;
+        }
+        
+        .hero-tagline {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+        }
+        
+        .hero-text {
+            font-size: 1.1rem;
+            max-width: 500px;
+            line-height: 1.8;
+        }
+        
+        .hero-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        /* NOVO: Carrossel de Stories na Hero Section */
+        .stories-carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+        
+        .story-container {
+            width: 300px;
+            height: 550px;
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            animation: float 6s ease-in-out infinite;
+            z-index: 999;
+        }
+        
+        .story {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            top: 0;
+            left: 0;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            border-radius: 24px;
+            transform: scale(0.9);
+        }
+        
+        .story.active {
+            opacity: 1;
+            z-index: 5;
+            transform: scale(1);
+        }
+        
+        .story-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .story-content {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            color: white;
+            z-index: 6;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease 0.2s;
+        }
+        
+        .story.active .story-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .story-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+        }
+        
+        .story-control {
+            flex: 1;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            height: 100%;
+            outline: none;
+            transition: background 0.3s ease;
+        }
+        
+        .story-control:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .story-progress {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 15;
+            padding: 10px;
+        }
+        
+        .progress-segment {
+            height: 3px;
+            flex: 1;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress-segment.viewed .progress-fill {
+            width: 100%;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: #fff;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+        
+        .progress-fill.active {
+            animation: progressFill 5s linear forwards;
+        }
+        
+        @keyframes progressFill {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .background-story {
+            position: absolute;
+            z-index: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 280px;
+            height: 500px;
+            opacity: 0.7;
+            transition: all 0.5s ease;
+        }
+        
+        .background-story-1 {
+            top: 20%;
+            right: 60%;
+            transform: translateX(40px) rotateY(-15deg);
+            animation: float 6s ease-in-out infinite 1s;
+            filter: brightness(0.7) blur(2px);
+        }
+        
+        .background-story-2 {
+            top: 10%;
+            left: 50%;
+            transform: translateX(-40px) rotateY(15deg);
+            animation: float 6s ease-in-out infinite 0.5s;
+            filter: brightness(0.7) blur(2px);
+        }
+        
+        .story-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .hero-decorations {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 3;
+        }
+        
+        .hero-decoration-zigzag {
+            display: flex;
+            align-items: center;
+        }
+        
+        .zigzag-line {
+            width: 20px;
+            height: 2px;
+            background-color: #e95c33;
+            display: inline-block;
+            transform: rotate(45deg);
+            margin: 0 2px;
+        }
+        
+        .hero-decoration-triangle {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 50px;
+            height: 50px;
+            z-index: 3;
+            animation: float 6s ease-in-out infinite 1.5s;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 43px solid #e95c33;
+        }
+        
+        /* ===== PROJECTS SECTION ===== */
+        .projects {
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .projects:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(233, 92, 51, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        
+        .projects-heading {
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .projects-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .projects-title .outline {
+            color: transparent;
+            -webkit-text-stroke: 1px #ffffff;
+        }
+        
+        .projects-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            opacity: 0.7;
+        }
+        
+        /* MODIFICADO: Projects Grid com informações sempre visíveis */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .project-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            background-color: #111;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .project-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .project-item:nth-child(1) {
+            grid-column: 1 / 7;
+            grid-row: 1 / 3;
+        }
+        
+        .project-item:nth-child(2) {
+            grid-column: 7 / 13;
+            grid-row: 1 / 2;
+        }
+        
+        .project-item:nth-child(3) {
+            grid-column: 7 / 10;
+            grid-row: 2 / 3;
+        }
+        
+        .project-item:nth-child(4) {
+            grid-column: 10 / 13;
+            grid-row: 2 / 3;
+        }
+        
+        .project-item:nth-child(5) {
+            grid-column: 1 / 4;
+            grid-row: 3 / 4;
+        }
+        
+        .project-item:nth-child(6) {
+            grid-column: 4 / 13;
+            grid-row: 3 / 4;
+        }
+        
+        .project-media-wrapper {
+            position: relative;
+            overflow: hidden;
+            flex-grow: 1;
+            border-radius: 8px 8px 0 0;
+            height: 70%;
+        }
+        
+        .project-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .project-item:hover .project-media {
+            transform: scale(1.05);
+        }
+        
+        .project-info {
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(17,17,17,0.95), #111);
+            border-radius: 0 0 8px 8px;
+            transform: translateY(5px);
+            opacity: 0.9;
+            transition: all 0.4s ease;
+        }
+        
+        .project-item:hover .project-info {
+            transform: translateY(0);
+            opacity: 1;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.95), #0a0a0a);
+        }
+        
+        .project-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #e95c33;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+            transition: color 0.3s ease;
+        }
+        
+        .project-item:hover .project-title {
+            color: #fff;
+        }
+        
+        .project-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .project-item:hover .project-description {
+            opacity: 1;
+        }
+        
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            color: #ffffff;
+            font-size: 0.9rem;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .project-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #e95c33;
+            transition: width 0.3s ease;
+        }
+        
+        .project-link:hover:after {
+            width: 100%;
+        }
+        
+        .project-link-icon {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-link:hover .project-link-icon {
+            transform: translateX(5px);
+            color: #e95c33;
+        }
+        
+        .view-all-btn {
+            margin-top: 60px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn-more {
+            background-color: transparent;
+            border: 1px solid #e95c33;
+            color: #e95c33;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-more:hover {
+            background-color: #e95c33;
+            color: #ffffff;
+        }
+        
+        .btn-more .btn-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-more:hover .btn-icon {
+            transform: translateX(5px);
+        }
+        
+        /* ===== CLIENTS SECTION ===== */
+        .clients {
+            padding: 80px 0;
+            background-color: #0D0D0D;
+            overflow: hidden;
+        }
+        
+        .clients-title {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .client-logos-container {
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .client-logos {
+            display: flex;
+            align-items: center;
+            animation: scrollLogos 30s linear infinite;
+            width: max-content;
+        }
+        
+        .client-logo {
+            height: 50px;
+            margin: 0 40px;
+            opacity: 0.7;
+            transition: all 0.4s ease;
+            filter: grayscale(100%);
+        }
+        
+        .client-logo:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        /* ===== SERVICES SECTION ===== */
+        .services {
+            padding: 120px 0;
+            background-color: #0D0D0D;
+        }
+        
+        .services-heading {
+            margin-bottom: 80px;
+        }
+        
+        .services-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .services-title .outline {
+            color: transparent;
+            -webkit-text-stroke: 1px #ffffff;
+        }
+        
+        .services-description {
+            font-size: 1.2rem;
+            max-width: 600px;
+            font-weight: 300;
+        }
+        
+        .services-list {
+            margin-top: 80px;
+        }
+        
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .service-item:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #e95c33;
+            transition: width 0.5s ease;
+        }
+        
+        .service-item:hover:after {
+            width: 100%;
+        }
+        
+        .service-item:hover {
+            padding-left: 20px;
+        }
+        
+        .service-item:hover .service-name {
+            color: #e95c33;
+        }
+        
+        .service-item:hover .service-icon {
+            transform: translateX(10px) rotate(45deg);
+        }
+        
+        .service-name {
+            font-size: 2.5rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .service-icon {
+            font-size: 1.5rem;
+            color: #e95c33;
+            transition: transform 0.3s ease;
+        }
+        
+        /* ===== MANIFESTO SECTION ===== */
+        .manifesto {
+            padding: 150px 0;
+            position: relative;
+        }
+        
+        .manifesto-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 50px;
+        }
+        
+        .manifesto-title {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+        
+        .manifesto-title .outline {
+            color: transparent;
+            -webkit-text-stroke: 1px #ffffff;
+        }
+        
+        .manifesto-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+        
+        .manifesto-text p {
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .manifesto-text p:hover {
+            transform: translateX(10px);
+            color: #e95c33;
+        }
+        
+        .manifesto-text .highlight {
+            color: #e95c33;
+            font-weight: 600;
+        }
+        
+        /* ===== CTA SECTION ===== */
+        .cta {
+            padding: 120px 0;
+            background-color: #e95c33;
+            color: #ffffff;
+            border-radius: 20px;
+            margin: 0 20px;
+            margin-bottom: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta:before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .cta:after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+        
+        .cta-btn {
+            background-color: #ffffff;
+            color: #e95c33;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-btn:hover {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+        }
+        
+        .cta-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+            transform: skewX(-30deg);
+        }
+        
+        .cta-btn:hover:after {
+            left: 100%;
+        }
+        
+        /* ===== CONTACT SECTION ===== */
+        .contact {
+            padding: 100px 0;
+        }
+        
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 50px;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .contact-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #e95c33;
+            transition: width 0.3s ease;
+        }
+        
+        .contact-info:hover .contact-title:after {
+            width: 100%;
+        }
+        
+        .contact-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .contact-details {
+            margin-bottom: 40px;
+        }
+        
+        .contact-details p {
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-details p:hover {
+            transform: translateX(10px);
+        }
+        
+        .contact-email {
+            color: #e95c33;
+            font-weight: 600;
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .contact-email:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #e95c33;
+            transition: width 0.3s ease;
+        }
+        
+        .contact-email:hover:after {
+            width: 100%;
+        }
+        
+        .contact-form {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #e95c33;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        textarea.form-input {
+            height: 150px;
+            resize: none;
+        }
+        
+        .submit-btn {
+            background-color: #e95c33;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: transparent;
+            color: #e95c33;
+            border: 1px solid #e95c33;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .footer-nav {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .footer-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .footer-nav a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: #e95c33;
+            transition: width 0.3s ease;
+        }
+        
+        .footer-nav a:hover {
+            color: #e95c33;
+        }
+        
+        .footer-nav a:hover:after {
+            width: 100%;
+        }
+        
+        .contact-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e95c33;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: #ffffff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .contact-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(233, 92, 51, 0.3);
+        }
+        
+        .contact-circle-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: rotate 10s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .contact-circle-inner {
+            position: absolute;
+            font-size: 1.5rem;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-circle:hover .contact-circle-inner {
+            transform: rotate(45deg);
+        }
+        
+        .footer-bottom {
+            margin-top: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-bottom a {
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-bottom a:hover {
+            opacity: 1;
+            color: #e95c33;
+        }
+        
+        .up-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-bottom a:hover .up-arrow {
+            transform: translateY(-5px);
+        }
+
+/* Stories Carousel com Rolagem Infinita */
+.stories-carousel-section {
+  padding: 80px 0;
+  background-color: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: #ffffff;
+}
+
+.section-title .highlight {
+  color: #e95c33;
+}
+
+.stories-slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stories-slider {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.slider-track {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  transition: transform 0.5s ease-out;
+  padding: 20px 0;
+  will-change: transform;
+}
+
+.story-card {
+  flex: 0 0 300px;
+  height: 450px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #111111;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.story-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(233, 92, 51, 0.3);
+}
+
+.story-media-wrapper {
+  position: relative;
+  height: 70%;
+  overflow: hidden;
+}
+
+.story-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.story-card:hover .story-thumbnail {
+  transform: scale(1.05);
+}
+
+.story-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.story-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.story-card:hover .story-overlay {
+  opacity: 1;
+}
+
+.story-play-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(233, 92, 51, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.story-card:hover .story-play-btn {
+  transform: scale(1.1);
+  background-color: #e95c33;
+}
+
+.story-info {
+  padding: 20px;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.story-title {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.story-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.slider-arrow {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.slider-arrow:hover {
+  background-color: #e95c33;
+  transform: scale(1.1);
+}
+
+/* Adicionar indicador de YouTube na thumbnail */
+.story-card:before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 20px;
+  background-color: red;
+  border-radius: 5px;
+  z-index: 5;
+}
+
+.story-card:after {
+  content: '\f167';
+  font-family: 'Font Awesome 5 Brands';
+  position: absolute;
+  top: 15px;
+  right: 22px;
+  font-size: 14px;
+  color: white;
+  z-index: 6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .story-card {
+    flex: 0 0 250px;
+    height: 400px;
+  }
+  
+  .story-title {
+    font-size: 1.1rem;
+  }
+  
+  .story-desc {
+    font-size: 0.8rem;
+  }
+  
+  .slider-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-card {
+    flex: 0 0 220px;
+    height: 350px;
+  }
+  
+  .slider-arrow {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .story-play-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+
+/* ==== ESTILOS GERAIS ==== */
+:root {
+  --primary-color: #e95c33;
+  --secondary-color: #e95c33;
+  --accent-color: #ff4d4d;
+  --text-color: #ffffff;
+  --bg-dark: #0a0a0a;
+  --bg-darker: #070707;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-hover: rgba(255, 255, 255, 0.08);
+  --transition: all 0.3s ease;
+}
+
+.container {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.lh-section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.lh-section-subtitle {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  display: inline-block;
+  position: relative;
+}
+
+.lh-section-subtitle::before,
+.lh-section-subtitle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 1px;
+  background-color: var(--primary-color);
+}
+
+.lh-section-subtitle::before {
+  left: -40px;
+}
+
+.lh-section-subtitle::after {
+  right: -40px;
+}
+
+.lh-section-title {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+.lh-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.lh-section-desc {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  opacity: 0.8;
+}
+
+/* ==== SEÇÃO SERVIÇOS ==== */
+.lh-services {
+  padding: 120px 0;
+  background-color: var(--bg-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.lh-services::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(0, 102, 204, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.5;
+}
+
+.lh-services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.lh-service-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 40px 30px;
+  transition: var(--transition);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.lh-service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(to bottom, var(--primary-color) 0%, transparent 100%);
+  opacity: 0.1;
+  transition: var(--transition);
+  z-index: -1;
+}
+
+.lh-service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 102, 204, 0.2);
+}
+
+.lh-service-card:hover::before {
+  height: 100%;
+}
+
+.lh-service-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(0, 102, 204, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+  transition: var(--transition);
+}
+
+.lh-service-icon i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  transition: var(--transition);
+}
+
+.lh-service-card:hover .lh-service-icon {
+  background-color: var(--primary-color);
+}
+
+.lh-service-card:hover .lh-service-icon i {
+  color: #ffffff;
+  transform: rotateY(360deg);
+  transition: transform 0.8s ease;
+}
+
+.lh-service-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.lh-service-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: var(--transition);
+}
+
+.lh-service-card:hover .lh-service-title::after {
+  width: 80px;
+}
+
+.lh-service-desc {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+.lh-service-features {
+  list-style: none;
+  margin-top: 20px;
+}
+
+.lh-service-features li {
+  padding-left: 25px;
+  position: relative;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  transition: var(--transition);
+}
+
+.lh-service-features li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+}
+
+.lh-service-card:hover .lh-service-features li {
+  opacity: 1;
+  transform: translateX(5px);
+  transition-delay: calc(0.05s * var(--i));
+}
+
+.lh-service-hover {
+  position: absolute;
+  bottom: -50px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.lh-service-hover span {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lh-service-hover i {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.lh-service-card:hover .lh-service-hover {
+  bottom: 30px;
+  opacity: 1;
+}
+
+.lh-service-card:hover .lh-service-hover i {
+  animation: arrowMove 1s infinite alternate;
+}
+
+@keyframes arrowMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(5px); }
+}
+
+/* ==== SEÇÃO METODOLOGIA ==== */
+.lh-methodology {
+  padding: 120px 0;
+  background-color: var(--bg-darker);
+  position: relative;
+  overflow: hidden;
+}
+
+.lh-methodology::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+  opacity: 0.05;
+  border-radius: 50%;
+}
+
+.lh-methodology::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+  opacity: 0.05;
+  border-radius: 50%;
+}
+
+.lh-methodology-timeline {
+  position: relative;
+  margin: 0 auto 100px;
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.lh-timeline-progress {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-50%);
+}
+
+.lh-progress-bar {
+  height: 100%;
+  width: 0;
+  background-color: var(--primary-color);
+  transition: width 0.5s ease;
+}
+
+.lh-timeline-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+  opacity: 0.5;
+  transition: var(--transition);
+}
+
+.lh-timeline-item.active {
+  opacity: 1;
+}
+
+.lh-timeline-content {
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  position: relative;
+  transition: var(--transition);
+}
+
+.lh-timeline-item.active .lh-timeline-content {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.lh-timeline-icon {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(0, 102, 204, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: -60px auto 20px;
+  position: relative;
+  z-index: 10;
+  transition: var(--transition);
+}
+
+.lh-timeline-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, var(--primary-color), transparent);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.lh-timeline-item.active .lh-timeline-icon::before {
+  opacity: 0.5;
+  animation: rotateGradient 4s linear infinite;
+}
+
+.lh-timeline-icon i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  transition: var(--transition);
+}
+
+.lh-timeline-item.active .lh-timeline-icon {
+  background-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.lh-timeline-item.active .lh-timeline-icon i {
+  color: #ffffff;
+}
+
+.lh-timeline-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.lh-timeline-desc {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.lh-timeline-dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.lh-timeline-dots span {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+}
+
+.lh-timeline-item.active .lh-timeline-dots span {
+  background-color: var(--primary-color);
+  animation: pulseDot 1.5s infinite;
+}
+
+.lh-timeline-item.active .lh-timeline-dots span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.lh-timeline-item.active .lh-timeline-dots span:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.lh-timeline-item::after {
+  content: attr(data-step);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background-color: var(--bg-darker);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  z-index: 5;
+  transition: var(--transition);
+}
+
+.lh-timeline-item.active::after {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.lh-methodology-numbers {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.lh-number-item {
+  text-align: center;
+  position: relative;
+}
+
+.lh-number-value {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  display: inline-block;
+}
+
+.lh-percent {
+  font-size: 2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.lh-number-label {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  opacity: 0.8;
+}
+
+
+
+/* ===== FAQ SECTION ===== */
+.faq {
+    padding: 120px 0;
+    background-color: #0D0D0D;
+}
+
+.faq-heading {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.faq-title {
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+}
+
+.faq-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1px #ffffff;
+}
+
+.faq-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+.faq-question {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: #e95c33;
+}
+
+.faq-toggle {
+    color: #e95c33;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    font-size: 1rem;
+    opacity: 0.8;
+    line-height: 1.8;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 300px;
+    margin-top: 15px;
+}
+
+/* ===== GARANTIAS SECTION ===== */
+.guarantees {
+    padding: 100px 0;
+    background-color: #0a0a0a;
+}
+
+.guarantees-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.guarantee-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    height: 100%;
+    text-align: center;
+}
+
+.guarantee-card:hover {
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.guarantee-icon {
+    font-size: 2.5rem;
+    color: #e95c33;
+    margin-bottom: 20px;
+}
+
+.guarantee-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.guarantee-description {
+    font-size: 1rem;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* ===== CTA SECTION ===== */
+.cta {
+    padding: 120px 0;
+    background-color: #e95c33;
+    color: #ffffff;
+    border-radius: 20px;
+    margin: 0 20px;
+    margin-bottom: 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta:before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.cta:after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 300px;
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+}
+
+.cta-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-title {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.cta-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-form {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.cta-form-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #ffffff;
+}
+
+.cta-btn {
+    background-color: #ffffff;
+    color: #e95c33;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.cta-btn:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-5px);
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .lh-section-title {
+    font-size: 2.5rem;
+  }
+  
+  .lh-methodology-timeline {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .lh-timeline-content {
+    width: 100%;
+  }
+  
+  .lh-methodology-numbers {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .lh-section-title {
+    font-size: 2rem;
+  }
+  
+  .lh-section-desc {
+    font-size: 1rem;
+  }
+  
+  .lh-service-card {
+    padding: 30px 20px;
+  }
+}
+    </style>
+</head>
+<body>
+        <!-- Preloader -->
+        <div class="preloader">
+            <div class="preloader-logo">Caja<span class="dot">.</span></div>
+            <div class="preloader-bar-container">
+                <div class="preloader-bar"></div>
+            </div>
+        </div>
+    
+        <!-- Botão Voltar ao Topo -->
+        <a href="#home" class="back-to-top">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+        
+        <!-- Header -->
+        <header id="header">
+            <div class="container">
+                <div class="header-inner">
+                    <a href="#" class="logo">Caja</a>
+                    <nav class="nav-menu">
+                        <a href="#projects" class="nav-link">Projetos</a>
+                        <a href="#services" class="nav-link">Serviços</a>
+                        <a href="#manifesto" class="nav-link">Manifesto</a>
+                        <a href="#contact" class="contact-btn">
+                            Contato <span class="arrow-icon">↗</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Hero Section com Stories -->
+        <!-- Hero Section com Stories do YouTube -->
+        <section class="hero" id="home">
+          <div class="hero-background">
+              <div class="hero-background-dots"></div>
+          </div>
+          
+          <div class="hero-container">
+              <div class="hero-left animate-fade-in">
+                  <h1 class="hero-logo">Caja<span class="dot">.</span></h1>
+                  <div class="hero-socials animate-fade-in delay-200">
+                     
+                  </div>
+                  <p class="hero-tagline animate-fade-in delay-300">//Combinamos criatividade e <span class="highlight">estratégia.</span></p>
+                  <div class="hero-text animate-fade-in delay-400">
+                      <p>A Cajá Filmes nasceu da paixão por contar histórias e transformar marcas através do audiovisual. Somos mais do que uma produtora de vídeo; somos estratégistas visuais, focados em criar conteúdos que geram impacto real e resultados mensuráveis.</p>
+                  </div>
+              </div>
+              <div class="hero-right">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Lj404o5DpMg?si=FbkDjrtOs9qG9tgf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+          </div>
+          
+          <div class="hero-decorations">
+              <div class="hero-decoration-zigzag">
+                  <span class="zigzag-line"></span>
+                  <span class="zigzag-line"></span>
+                  <span class="zigzag-line"></span>
+                  <span class="zigzag-line"></span>
+                  <span class="zigzag-line"></span>
+              </div>
+          </div>
+          
+          <div class="hero-decoration-triangle">
+              <div class="triangle"></div>
+          </div>
+      
+          <!-- Modal para reprodução de vídeo -->
+          <div id="video-modal" class="modal">
+              <div class="modal-content">
+                  <span class="close-modal">&times;</span>
+                  <div id="modal-video-container"></div>
+              </div>
+          </div>
+      </section>
+
+        <!-- Stories Carrossel -->
+        <!-- Stories Carousel Section - Rolagem Infinita -->
+        <!-- Stories Carousel Section - Rolagem Infinita -->
+        <section class="stories-carousel-section">
+          <div class="container">
+              <h2 class="section-title">Nossos <span class="highlight">Shorts</span></h2>
+              
+              <div class="stories-slider-container">
+                  <button class="slider-arrow prev-arrow"><i class="fas fa-chevron-left"></i></button>
+                  
+                  <div class="stories-slider">
+                      <div class="slider-track" id="sliderTrack">
+                          <!-- Story Card 1 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/2rcE94J6c1s/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/2rcE94J6c1s/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/2rcE94J6c1s?feature=shared" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <!-- Story Card 2 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/qA0nLxCmWYc/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/qA0nLxCmWYc/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/qA0nLxCmWYc" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <!-- Story Card 3 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/GDwYznpOGu0/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/GDwYznpOGu0/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/GDwYznpOGu0" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <!-- Story Card 4 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/hYHqMIBrXUE/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/hYHqMIBrXUE/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/hYHqMIBrXUE" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <!-- Story Card 5 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/1y1xFCTQnP0/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/1y1xFCTQnP0/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/1y1xFCTQnP0" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                          <!-- Story Card 6 -->
+                          <div class="story-card">
+                              <div class="story-media-wrapper">
+                                  <div class="youtube-container">
+                                      <img src="https://img.youtube.com/vi/YubTZnAWCNc/maxresdefault.jpg" 
+                                           alt="YouTube Short" 
+                                           class="youtube-thumbnail"
+                                           onerror="this.src='https://img.youtube.com/vi/YubTZnAWCNc/hqdefault.jpg'">
+                                      <div class="story-overlay">
+                                          <a href="https://youtube.com/shorts/YubTZnAWCNc" target="_blank" class="story-link">
+                                              <div class="story-play-btn">
+                                                  <i class="fab fa-youtube"></i>
+                                              </div>
+                                          </a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <button class="slider-arrow next-arrow"><i class="fas fa-chevron-right"></i></button>
+              </div>
+          </div>
+      </section>
+
+
+ <!-- Services Section -->
+ <section class="services" id="services">
+  <div class="container">
+      <div class="services-heading animate-fade-in">
+          <h2 class="services-title">
+              <span class="outline">O QUE NÓS</span><br>
+              FAZEMOS
+          </h2>
+          <p class="services-description">
+              Cada projeto é um desafio único que encaramos com muito entusiasmo e comprometimento em obter os melhores resultados.
+          </p>
+      </div>
+      
+      <div class="services-list">
+          <div class="service-item animate-fade-in delay-200">
+              <h3 class="service-name">Animação</h3>
+              <span class="service-icon">↗</span>
+          </div>
+          <div class="service-item animate-fade-in delay-300">
+              <h3 class="service-name">Filmes Publicitários</h3>
+              <span class="service-icon">↗</span>
+          </div>
+          <div class="service-item animate-fade-in delay-400">
+              <h3 class="service-name">Vídeos Institucionais</h3>
+              <span class="service-icon">↗</span>
+          </div>
+          <div class="service-item animate-fade-in delay-500">
+              <h3 class="service-name">Direção Criativa</h3>
+              <span class="service-icon">↗</span>
+          </div>
+          <div class="service-item animate-fade-in delay-600">
+              <h3 class="service-name">Produção Audiovisual</h3>
+              <span class="service-icon">↗</span>
+          </div>
+      </div>
+  </div>
+</section>
+        
+        <!-- SEÇÃO DE SERVIÇOS -->
+<section class="lh-services" id="servicos">
+    <div class="container">
+      <div class="lh-section-header">
+        <h2 class="lh-section-title">Nossos Serviços</h2>
+        <p class="lh-section-desc">Soluções audiovisuais completas que transformam sua comunicação. Do planejamento à entrega final, garantimos excelência em cada projeto.</p>
+      </div>
+      
+      <div class="lh-services-grid">
+        <!-- Serviço 1 -->
+        <div class="lh-service-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="lh-service-icon">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <h3 class="lh-service-title">Pacotes Mensais</h3>
+          <p class="lh-service-desc">Mantenha sua comunicação visual atualizada com conteúdo recorrente de alta qualidade.</p>
+          <ul class="lh-service-features">
+            <li>Produção de conteúdo para redes sociais</li>
+            <li>Produção de criativos para tráfego</li>
+            <li>Planejamento estratégico de conteúdo</li>
+            <li>Edições adicionais com valor promocional</li>
+          </ul>
+          <div class="lh-service-hover">
+            <span>Explore</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+  
+        <!-- Serviço 2 -->
+        <div class="lh-service-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="lh-service-icon">
+            <i class="fas fa-ad"></i>
+          </div>
+          <h3 class="lh-service-title">Criativos para Tráfego</h3>
+          <p class="lh-service-desc">Anúncios e conteúdos otimizados para campanhas que convertem e maximizam seu investimento em mídia.</p>
+          <ul class="lh-service-features">
+            <li>Storytelling persuasivo</li>
+            <li>Formatos otimizados para plataformas de anúncios</li>
+            <li>Foco em conversão</li>
+          </ul>
+          <div class="lh-service-hover">
+            <span>Explore</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+  
+        <!-- Serviço 3 -->
+        <div class="lh-service-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="lh-service-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h3 class="lh-service-title">Vídeos Institucionais</h3>
+          <p class="lh-service-desc">Apresente sua empresa, valores e diferenciais com produções de alto padrão que constroem autoridade.</p>
+          <ul class="lh-service-features">
+            <li>Roteirização estratégica</li>
+            <li>Filmagem com equipamentos profissionais</li>
+            <li>Tratamento de cor cinematográfico</li>
+          </ul>
+          <div class="lh-service-hover">
+            <span>Explore</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+  
+        <!-- Serviço 4 -->
+        <div class="lh-service-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="lh-service-icon">
+            <i class="fas fa-film"></i>
+          </div>
+          <h3 class="lh-service-title">Campanhas Publicitárias</h3>
+          <p class="lh-service-desc">Narrativas audiovisuais completas que fortalecem sua marca e comunicam sua mensagem com impacto.</p>
+          <ul class="lh-service-features">
+            <li>Conceito criativo único</li>
+            <li>Produção completa</li>
+            <li>Entrega em múltiplos formatos</li>
+          </ul>
+          <div class="lh-service-hover">
+            <span>Explore</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- SEÇÃO DE METODOLOGIA -->
+  <section class="lh-methodology" id="metodologia">
+    <div class="container">
+      <div class="lh-section-header">
+        <h2 class="lh-section-title">Nossa Metodologia</h2>
+        <p class="lh-section-desc">Um processo estruturado e eficiente para transformar suas ideias em resultados excepcionais.</p>
+      </div>
+      
+      <div class="lh-methodology-timeline">
+        <div class="lh-timeline-progress">
+          <div class="lh-progress-bar"></div>
+        </div>
+        
+        <!-- Etapa 1 -->
+        <div class="lh-timeline-item" data-step="1">
+          <div class="lh-timeline-content">
+            <div class="lh-timeline-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="lh-timeline-title">Briefing e Estratégia</h3>
+            <p class="lh-timeline-desc">Entendemos profundamente seus objetivos e público-alvo para definir a melhor abordagem para seu projeto.</p>
+            <div class="lh-timeline-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Etapa 2 -->
+        <div class="lh-timeline-item" data-step="2">
+          <div class="lh-timeline-content">
+            <div class="lh-timeline-icon">
+              <i class="fas fa-pencil-alt"></i>
+            </div>
+            <h3 class="lh-timeline-title">Planejamento</h3>
+            <p class="lh-timeline-desc">Elaboramos roteiros e planos de filmagem detalhados, garantindo que cada aspecto do projeto seja cuidadosamente pensado.</p>
+            <div class="lh-timeline-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Etapa 3 -->
+        <div class="lh-timeline-item" data-step="3">
+          <div class="lh-timeline-content">
+            <div class="lh-timeline-icon">
+              <i class="fas fa-video"></i>
+            </div>
+            <h3 class="lh-timeline-title">Produção</h3>
+            <p class="lh-timeline-desc">Utilizamos equipamentos de ponta e técnicas avançadas para capturar imagens de alta qualidade que contam sua história.</p>
+            <div class="lh-timeline-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Etapa 4 -->
+        <div class="lh-timeline-item" data-step="4">
+          <div class="lh-timeline-content">
+            <div class="lh-timeline-icon">
+              <i class="fas fa-edit"></i>
+            </div>
+            <h3 class="lh-timeline-title">Pós-produção</h3>
+            <p class="lh-timeline-desc">Edição, correção de cor e finalização com excelência técnica para um resultado profissional e impactante.</p>
+            <div class="lh-timeline-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Etapa 5 -->
+        
+      </div>
+      
+      <div class="lh-methodology-numbers">
+        <div class="lh-number-item" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="lh-number-value" data-count="150">0</h3>
+          <p class="lh-number-label">Projetos Concluídos</p>
+        </div>
+        <div class="lh-number-item" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="lh-number-value" data-count="95">0</h3>
+          <span class="lh-percent">%</span>
+          <p class="lh-number-label">Clientes Satisfeitos</p>
+        </div>
+        <div class="lh-number-item" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="lh-number-value" data-count="12">0</h3>
+          <p class="lh-number-label">Anos de Experiência</p>
+        </div>
+      </div>
+    </div>
+  </section>
+        
+        <!-- Clientes Section -->
+        <section class="clients">
+            <h2 class="clients-title">Clientes que confiam em nós</h2>
+            <div class="client-logos-container">
+                <div class="client-logos">
+                    <!-- Logos dos clientes -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Cliente 1" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Cliente 2" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Cliente 3" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Cliente 4" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Cliente 5" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Adidas_Logo.svg" alt="Cliente 6" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Cliente 7" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Slack_Technologies_Logo.svg" alt="Cliente 8" class="client-logo">
+                    <!-- Repetição para efeito contínuo -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Cliente 1" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Cliente 2" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Cliente 3" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Cliente 4" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Cliente 5" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Adidas_Logo.svg" alt="Cliente 6" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Cliente 7" class="client-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Slack_Technologies_Logo.svg" alt="Cliente 8" class="client-logo">
+                </div>
+            </div>
+        </section>
+        
+
+        
+        <!-- Manifesto Section -->
+        <section class="manifesto" id="manifesto">
+            <div class="container">
+                <div class="manifesto-container">
+                    <div class="animate-slide-left">
+                        <h2 class="manifesto-title">
+                            <span class="outline">NOSSO</span><br>
+                            MANIFESTO
+                        </h2>
+                    </div>
+                    <div class="manifesto-text animate-slide-right">
+                        <p>É ali...<br>
+                        Na pausa entre um corte e outro..<br>
+                        No caos calculado de luzes e sombras.<br>
+                        No olhar que encontra o ritmo perfeito da história.</p>
+                        
+                        <p>Em todos os frames que pulsam...<br>
+                        Cada detalhe é um universo.</p>
+                        
+                        <p>Não somos apenas uma produtora.<br>
+                        Somos o <span class="highlight">cume</span>.<br>
+                        O ponto mais alto do que podemos criar.</p>
+                        
+                        <p>Onde o visual encontra o visceral.<br>
+                        <span class="highlight">Peak</span>.</p>
+                        
+                        <p>Não fazemos vídeos.<br>
+                        Criamos experiências que marcam.<br>
+                        Onde histórias alcançam o topo.</p>
+                        
+                        <p>Estamos prontos. Você está?</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+<section class="faq">
+  <div class="container">
+      <div class="faq-heading animate-fade-in">
+          <h2 class="faq-title">
+              <span class="outline">PERGUNTAS</span><br>
+              FREQUENTES
+          </h2>
+      </div>
+      
+      <div class="faq-list">
+          <div class="faq-item animate-fade-in delay-100">
+              <div class="faq-question">
+                  Como funciona o pacote mensal de vídeos?
+                  <span class="faq-toggle">+</span>
+              </div>
+              <div class="faq-answer">
+                  Estabelecemos um plano personalizado com quantidade e tipos de vídeos conforme sua necessidade. Você tem acesso a um valor promocional para produções extras, garantindo flexibilidade.
+              </div>
+          </div>
+          
+          <div class="faq-item animate-fade-in delay-200">
+              <div class="faq-question">
+                  Vocês atendem apenas em Brasília?
+                  <span class="faq-toggle">+</span>
+              </div>
+              <div class="faq-answer">
+                  Nossa base é em Brasília, mas atendemos projetos em outras localidades. Entre em contato para avaliarmos sua necessidade específica.
+              </div>
+          </div>
+          
+          <div class="faq-item animate-fade-in delay-300">
+              <div class="faq-question">
+                  É possível utilizar meus equipamentos ou locação para gravação?
+                  <span class="faq-toggle">+</span>
+              </div>
+              <div class="faq-answer">
+                  Não. Utilizamos equipamentos profissionais próprios para garantir a qualidade e consistência de todos os nossos projetos.
+              </div>
+          </div>
+          
+          <div class="faq-item animate-fade-in delay-400">
+              <div class="faq-question">
+                  Como garantem a qualidade das produções?
+                  <span class="faq-toggle">+</span>
+              </div>
+              <div class="faq-answer">
+                  Dedicamos tempo adequado a cada etapa do processo, desde um planejamento detalhado até a pós-produção minuciosa, utilizando equipamentos de ponta e técnicas modernas.
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+        
+        <!-- CTA Section -->
+        <section class="cta" id="cta">
+            <div class="cta-container animate-fade-in">
+                <h2 class="cta-title">Você tem uma ideia?<br>Nós temos a execução!</h2>
+                <p class="cta-text">Criamos experiências que alimentam as conexões entre as marcas e as pessoas essenciais ao seu sucesso.</p>
+                <a href="#contact" class="cta-btn">Contate-nos <span>↗</span></a>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-container">
+                    <div class="contact-info animate-slide-left">
+                        <h3 class="contact-title">Informações<br>de contato</h3>
+                        <p class="contact-subtitle">Queremos contar sua história!</p>
+                        <div class="contact-details">
+                            <p>Av. Ayrton Senna, 300 Torre I, Sala 501<br>Gleba Palhano<br>Londrina - PR</p>
+                            <p>43 3342-1395</p>
+                            <p><a href="mailto:contato@peak.com" class="contact-email">contato@peak.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form animate-slide-right">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Nome" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-input" placeholder="E-mail" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-input" placeholder="Assunto" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-input" placeholder="Mensagem" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">
+                                Enviar mensagem <span>↗</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-container">
+                    <div class="footer-logo">PEAK</div>
+                    
+                    <nav class="footer-nav">
+                        <a href="#projects">Projetos</a>
+                        <a href="#services">Serviços</a>
+                        <a href="#manifesto">Manifesto</a>
+                        <a href="#contact">Contato</a>
+                    </nav>
+                    
+                    <a href="#contact" class="contact-circle">
+                        <div class="contact-circle-text">CONTATO • CONTATO • CONTATO • </div>
+                        <div class="contact-circle-inner">↗</div>
+                    </a>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>© 2025 Peak Produtora. Todos os direitos reservados.</p>
+                    <a href="#home">
+                        Voltar ao topo <span class="up-arrow">↑</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    
+<script>
+    // Este é o JavaScript responsável pela funcionalidade do site Peak
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Preloader
+    const preloader = document.querySelector('.preloader');
+    const preloaderBar = document.querySelector('.preloader-bar');
+    
+    // Simula o carregamento
+    let loadingProgress = 0;
+    const loadingInterval = setInterval(() => {
+        loadingProgress += 5;
+        preloaderBar.style.width = `${loadingProgress}%`;
+        
+        if (loadingProgress >= 100) {
+            clearInterval(loadingInterval);
+            setTimeout(() => {
+                preloader.classList.add('hide');
+                // Ativa as animações na tela inicial após o preloader
+                document.querySelectorAll('.animate-fade-in').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+                
+                document.querySelectorAll('.animate-slide-left, .animate-slide-right').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+            }, 500);
+        }
+    }, 80);
+    
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+    
+    // Botão Voltar ao Topo
+    const backToTopBtn = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+    
+    backToTopBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Funcionalidade de Stories
+    const stories = document.querySelectorAll('.story');
+    const progressSegments = document.querySelectorAll('.progress-segment');
+    const nextStoryBtn = document.getElementById('next-story');
+    const prevStoryBtn = document.getElementById('prev-story');
+    
+    let currentStoryIndex = 0;
+    let storyDuration = 5000; // 5 segundos por story
+    let storyInterval;
+    
+    function showStory(index) {
+        // Esconde todas as stories
+        stories.forEach(story => {
+            story.classList.remove('active');
+        });
+        
+        // Reset de todos os segmentos de progresso
+        progressSegments.forEach(segment => {
+            const fill = segment.querySelector('.progress-fill');
+            fill.classList.remove('active');
+            fill.style.width = '0';
+            segment.classList.remove('viewed');
+        });
+        
+        // Mostra a story atual
+        stories[index].classList.add('active');
+        
+        // Ativa o progresso atual
+        progressSegments[index].querySelector('.progress-fill').classList.add('active');
+        
+        // Marca os segmentos anteriores como vistos
+        for (let i = 0; i < index; i++) {
+            progressSegments[i].classList.add('viewed');
+        }
+        
+        // Reinicia o intervalo
+        clearInterval(storyInterval);
+        startStoryTimer();
+        
+        // Atualiza o índice atual
+        currentStoryIndex = index;
+    }
+    
+    function nextStory() {
+        let nextIndex = currentStoryIndex + 1;
+        if (nextIndex >= stories.length) {
+            nextIndex = 0;
+        }
+        showStory(nextIndex);
+    }
+    
+    function prevStory() {
+        let prevIndex = currentStoryIndex - 1;
+        if (prevIndex < 0) {
+            prevIndex = stories.length - 1;
+        }
+        showStory(prevIndex);
+    }
+    
+    function startStoryTimer() {
+        storyInterval = setTimeout(() => {
+            nextStory();
+        }, storyDuration);
+    }
+    
+    // Event Listeners para botões de navegação
+    nextStoryBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        nextStory();
+    });
+    
+    prevStoryBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        prevStory();
+    });
+    
+    // Event Listeners para cliques nos segmentos de progresso
+    progressSegments.forEach((segment, index) => {
+        segment.addEventListener('click', function() {
+            showStory(index);
+        });
+    });
+    
+    // Inicia o timer para o primeiro story
+    startStoryTimer();
+    
+    // Smooth Scroll para links de navegação
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // Formulário de Contato
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulação de envio de formulário
+            const submitBtn = contactForm.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = 'Enviando...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Simula uma resposta bem-sucedida
+                alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+                contactForm.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    }
+    
+    // Iniciar animações conforme o scroll
+    function isElementInViewport(el) {
+        const rect = el.getBoundingClientRect();
+        return (
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+            rect.bottom >= 0
+        );
+    }
+    
+    function handleScrollAnimations() {
+        document.querySelectorAll('.animate-fade-in, .animate-slide-left, .animate-slide-right').forEach(el => {
+            if (isElementInViewport(el) && !el.classList.contains('animated')) {
+                el.style.opacity = 1;
+                el.style.animationPlayState = 'running';
+                el.classList.add('animated');
+            }
+        });
+    }
+    
+    // Executa ao carregar a página e durante o scroll
+    handleScrollAnimations();
+    window.addEventListener('scroll', handleScrollAnimations);
+    
+    // Funcionalidade para projetos
+    const projectItems = document.querySelectorAll('.project-item');
+    
+    projectItems.forEach(item => {
+        // Efeito hover para tocar vídeo em velocidade normal
+        const video = item.querySelector('video');
+        
+        if (video) {
+            item.addEventListener('mouseenter', () => {
+                video.playbackRate = 1.5;
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                video.playbackRate = 1;
+            });
+        }
+    });
+    
+    // Animação para a seção de serviços
+    const serviceItems = document.querySelectorAll('.service-item');
+    
+    serviceItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Simula um clique para ver mais detalhes (poderia abrir um modal)
+            const serviceName = item.querySelector('.service-name').textContent;
+            console.log(`Serviço selecionado: ${serviceName}`);
+            
+            // Aqui poderia ser implementado um modal com mais detalhes sobre o serviço
+        });
+    });
+    
+    // Efeito parallax para o fundo de algumas seções
+    let lastScrollY = window.scrollY;
+    
+    function updateParallax() {
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY;
+        lastScrollY = currentScrollY;
+        
+        // Aplicar efeito parallax sutil aos fundos
+        const heroBg = document.querySelector('.hero-background');
+        if (heroBg) {
+            heroBg.style.transform = `translateY(${currentScrollY * 0.1}px)`;
+        }
+        
+        // Aplicar efeito ao triângulo na hero section
+        const triangle = document.querySelector('.hero-decoration-triangle');
+        if (triangle) {
+            triangle.style.transform = `translateY(${currentScrollY * 0.05}px) rotate(${currentScrollY * 0.02}deg)`;
+        }
+    }
+    
+    window.addEventListener('scroll', updateParallax);
+    
+    // Animação dos logos dos clientes
+    const clientLogos = document.querySelector('.client-logos');
+    
+    if (clientLogos) {
+        clientLogos.addEventListener('mouseenter', () => {
+            clientLogos.style.animationPlayState = 'paused';
+        });
+        
+        clientLogos.addEventListener('mouseleave', () => {
+            clientLogos.style.animationPlayState = 'running';
+        });
+    }
+    
+    // Inicialização de vídeos
+    const videos = document.querySelectorAll('video');
+    
+    function setupVideoPlayback() {
+        videos.forEach(video => {
+            // Verifica se o vídeo está visível na viewport
+            if (isElementInViewport(video)) {
+                if (video.paused) {
+                    video.play().catch(e => {
+                        // Lidando com políticas de autoplay dos navegadores
+                        console.log('Reprodução de vídeo automática bloqueada pelo navegador', e);
+                    });
+                }
+            } else {
+                if (!video.paused) {
+                    video.pause();
+                }
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', setupVideoPlayback);
+    setupVideoPlayback();
+    
+    // Círculo de contato com rotação de texto
+    const contactCircle = document.querySelector('.contact-circle');
+    
+    if (contactCircle) {
+        // Cria o texto circular
+        const text = "CONTATO • CONTATO • CONTATO • CONTATO • ";
+        const circleText = contactCircle.querySelector('.contact-circle-text');
+        
+        if (circleText) {
+            circleText.innerHTML = text;
+            
+            // Animação ao hover
+            contactCircle.addEventListener('mouseenter', () => {
+                circleText.style.animationPlayState = 'running';
+                circleText.style.animationDuration = '4s';
+            });
+            
+            contactCircle.addEventListener('mouseleave', () => {
+                circleText.style.animationDuration = '10s';
+            });
+        }
+    }
+});
+
+
+
+
+// Carrossel com Rolagem Infinita
+document.addEventListener('DOMContentLoaded', function() {
+  // Elementos
+  const sliderTrack = document.querySelector('.slider-track');
+  const storyCards = document.querySelectorAll('.story-card');
+  const prevArrow = document.querySelector('.prev-arrow');
+  const nextArrow = document.querySelector('.next-arrow');
+  
+  // Configurações
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID = 0;
+  let currentIndex = 0;
+  const cardWidth = storyCards[0].offsetWidth;
+  const cardMargin = parseInt(window.getComputedStyle(storyCards[0]).marginRight);
+  const cardTotal = storyCards.length;
+  const sliderWidth = cardWidth + cardMargin;
+  let autoScrollInterval;
+  
+  // Clonar cards para criar efeito infinito
+  function setupInfiniteScroll() {
+    // Clonar os primeiros cards para o final
+    const clonesAtEnd = Array.from(storyCards).slice(0, getVisibleCount()).map(card => {
+      const clone = card.cloneNode(true);
+      clone.classList.add('clone');
+      return clone;
+    });
+    
+    // Clonar os últimos cards para o início
+    const clonesAtStart = Array.from(storyCards).slice(-getVisibleCount()).map(card => {
+      const clone = card.cloneNode(true);
+      clone.classList.add('clone');
+      return clone;
+    });
+    
+    // Adicionar clones ao slider
+    clonesAtStart.forEach(clone => sliderTrack.prepend(clone));
+    clonesAtEnd.forEach(clone => sliderTrack.append(clone));
+    
+    // Ajustar posição inicial
+    setPositionByIndex(getVisibleCount());
+  }
+  
+  // Obter o número de cards visíveis de acordo com o tamanho da tela
+  function getVisibleCount() {
+    if (window.innerWidth < 480) return 1;
+    if (window.innerWidth < 768) return 2;
+    if (window.innerWidth < 1024) return 3;
+    return 4;
+  }
+  
+  // Definir posição do slider com base no índice
+  function setPositionByIndex(index) {
+    currentIndex = index;
+    currentTranslate = currentIndex * -sliderWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+  }
+  
+  // Atualizar posição do slider
+  function setSliderPosition() {
+    sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+  }
+  
+  // Animar o slider
+  function animation() {
+    setSliderPosition();
+    if (isDragging) requestAnimationFrame(animation);
+  }
+  
+  // Funções para arrastar (drag)
+  function touchStart(event) {
+    if (event.type === 'touchstart') {
+      startPos = event.touches[0].clientX;
+    } else {
+      startPos = event.clientX;
+      document.addEventListener('mousemove', touchMove);
+      document.addEventListener('mouseup', touchEnd);
+    }
+    
+    isDragging = true;
+    animationID = requestAnimationFrame(animation);
+    sliderTrack.style.transition = 'none';
+    
+    // Parar auto scroll quando usuário interagir
+    clearInterval(autoScrollInterval);
+  }
+  
+  function touchMove(event) {
+    if (isDragging) {
+      const currentPosition = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+      const diff = currentPosition - startPos;
+      currentTranslate = prevTranslate + diff;
+    }
+  }
+  
+  function touchEnd() {
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+    
+    // Determinar para qual card deslizar com base na distância arrastada
+    const moveBy = currentTranslate - prevTranslate;
+    
+    // Se arrastou para a esquerda (negativo) vai para o próximo, se arrastou para a direita (positivo) vai para o anterior
+    if (moveBy < -100) moveToNextSlide();
+    else if (moveBy > 100) moveToPrevSlide();
+    else snapToCurrentSlide();
+    
+    // Remover event listeners temporários para desktop
+    document.removeEventListener('mousemove', touchMove);
+    document.removeEventListener('mouseup', touchEnd);
+    
+    // Restaurar auto scroll após interação
+    startAutoScroll();
+  }
+  
+  // Mover para o próximo slide
+  function moveToNextSlide() {
+    currentIndex += 1;
+    sliderTrack.style.transition = 'transform 0.5s ease-out';
+    currentTranslate = currentIndex * -sliderWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+    
+    // Verificar se chegou ao final e precisa resetar
+    checkInfiniteLoop();
+  }
+  
+  // Mover para o slide anterior
+  function moveToPrevSlide() {
+    currentIndex -= 1;
+    sliderTrack.style.transition = 'transform 0.5s ease-out';
+    currentTranslate = currentIndex * -sliderWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+    
+    // Verificar se chegou ao início e precisa resetar
+    checkInfiniteLoop();
+  }
+  
+  // Resetar para a posição atual
+  function snapToCurrentSlide() {
+    sliderTrack.style.transition = 'transform 0.5s ease-out';
+    currentTranslate = currentIndex * -sliderWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+  }
+  
+  // Verificar e ajustar para criar efeito de loop infinito
+  function checkInfiniteLoop() {
+    // Usa setTimeout para aguardar a transição terminar antes de verificar
+    setTimeout(() => {
+      // Remover transição para reposicionamento invisível
+      sliderTrack.style.transition = 'none';
+      
+      // Se está no clone do final, saltar para os originais no início
+      if (currentIndex >= cardTotal + getVisibleCount()) {
+        currentIndex = getVisibleCount();
+        currentTranslate = currentIndex * -sliderWidth;
+        prevTranslate = currentTranslate;
+        setSliderPosition();
+      }
+      
+      // Se está no clone do início, saltar para os originais no final
+      if (currentIndex <= 0) {
+        currentIndex = cardTotal;
+        currentTranslate = currentIndex * -sliderWidth;
+        prevTranslate = currentTranslate;
+        setSliderPosition();
+      }
+    }, 500); // Deve corresponder à duração da transição CSS
+  }
+  
+  // Iniciar deslocamento automático
+  function startAutoScroll() {
+    autoScrollInterval = setInterval(() => {
+      moveToNextSlide();
+    }, 4000); // Mudar slide a cada 4 segundos
+  }
+  
+  // Event listeners
+  storyCards.forEach((card, index) => {
+    // Impedir o comportamento padrão de arrastar imagens
+    const img = card.querySelector('img');
+    if (img) img.addEventListener('dragstart', e => e.preventDefault());
+    
+    // Touch eventos
+    card.addEventListener('touchstart', touchStart);
+    card.addEventListener('touchmove', touchMove);
+    card.addEventListener('touchend', touchEnd);
+    
+    // Mouse eventos
+    card.addEventListener('mousedown', touchStart);
+  });
+  
+  prevArrow.addEventListener('click', moveToPrevSlide);
+  nextArrow.addEventListener('click', moveToNextSlide);
+  
+  // Quando a transição terminar, verificar se precisa de reposicionamento
+  sliderTrack.addEventListener('transitionend', () => {
+    if (sliderTrack.style.transition !== 'none') {
+      checkInfiniteLoop();
+    }
+  });
+  
+  // Pausar deslocamento automático quando o mouse estiver sobre o slider
+  const storiesSlider = document.querySelector('.stories-slider');
+  storiesSlider.addEventListener('mouseenter', () => {
+    clearInterval(autoScrollInterval);
+  });
+  
+  storiesSlider.addEventListener('mouseleave', () => {
+    startAutoScroll();
+  });
+  
+  // Inicialização
+  setupInfiniteScroll();
+  startAutoScroll();
+  
+  // Atualizar layout em caso de redimensionamento
+  window.addEventListener('resize', () => {
+    // Atualizar valores após redimensionamento
+    clearInterval(autoScrollInterval);
+    
+    // Precisa recarregar para recalcular posições e dimensões
+    setTimeout(() => {
+      location.reload();
+    }, 200);
+  });
+});
+
+
+
+
+
+// Inicialização quando o DOM está completamente carregado
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar a animação dos serviços
+  initServiceCards();
+  
+  // Inicializar a animação da linha do tempo de metodologia
+  initMethodologyTimeline();
+  
+  // Inicializar contador de números
+  initNumberCounter();
+  
+  // Animação ao scroll
+  initScrollAnimations();
+});
+
+// Animar cards de serviços
+function initServiceCards() {
+  const serviceCards = document.querySelectorAll('.lh-service-card');
+  
+  serviceCards.forEach((card, index) => {
+    // Definir índice para animação escalonada dos itens da lista
+    const features = card.querySelectorAll('.lh-service-features li');
+    features.forEach((item, i) => {
+      item.style.setProperty('--i', i);
+    });
+    
+    // Animação de entrada
+    setTimeout(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, 200 * index);
+    
+    // Interação de hover para dispositivos sem hover
+    card.addEventListener('touchstart', function() {
+      this.classList.add('hover');
+    });
+    
+    card.addEventListener('touchend', function() {
+      setTimeout(() => {
+        this.classList.remove('hover');
+      }, 500);
+    });
+  });
+}
+
+// Animar timeline de metodologia
+function initMethodologyTimeline() {
+  const timelineItems = document.querySelectorAll('.lh-timeline-item');
+  const progressBar = document.querySelector('.lh-progress-bar');
+  let currentStep = 0;
+  const totalSteps = timelineItems.length;
+  
+  // Função para atualizar o passo ativo
+  function updateActiveStep() {
+    // Remover classe ativa de todos os itens
+    timelineItems.forEach(item => {
+      item.classList.remove('active');
+    });
+    
+    // Adicionar classe ativa ao item atual
+    timelineItems[currentStep].classList.add('active');
+    
+    // Atualizar barra de progresso
+    const progressWidth = ((currentStep + 1) / totalSteps) * 100;
+    progressBar.style.width = `${progressWidth}%`;
+  }
+  
+  // Iniciar com o primeiro passo ativo
+  updateActiveStep();
+  
+  // Avançar para o próximo passo a cada 3 segundos
+  setInterval(() => {
+    currentStep = (currentStep + 1) % totalSteps;
+    updateActiveStep();
+  }, 3000);
+  
+  // Permitir clique nos passos para navegar
+  timelineItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentStep = index;
+      updateActiveStep();
+    });
+  });
+}
+
+// Animação de contagem para seção de números
+function initNumberCounter() {
+  const numberElements = document.querySelectorAll('.lh-number-value');
+  
+  // Verificar se o elemento está visível na tela
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+      rect.bottom >= 0
+    );
+  }
+  
+  // Animar contagem
+  function animateCounter(el) {
+    const target = parseInt(el.getAttribute('data-count'));
+    const duration = 2000; // duração em ms
+    const stepTime = 50; // intervalo entre cada atualização
+    const steps = duration / stepTime;
+    const increment = target / steps;
+    let current = 0;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      el.textContent = Math.floor(current);
+      
+      if (current >= target) {
+        el.textContent = target;
+        clearInterval(timer);
+      }
+    }, stepTime);
+    
+    // Marcar como já animado
+    el.classList.add('counted');
+  }
+  
+  // Função para verificar e iniciar contagem quando visível
+  function checkNumbersVisibility() {
+    numberElements.forEach(element => {
+      if (isElementInViewport(element) && !element.classList.contains('counted')) {
+        animateCounter(element);
+      }
+    });
+  }
+  
+  // Verificar visibilidade ao carregar e ao rolar
+  checkNumbersVisibility();
+  window.addEventListener('scroll', checkNumbersVisibility);
+}
+
+// Animações no scroll
+function initScrollAnimations() {
+  const animatedElements = document.querySelectorAll('[data-aos]');
+  
+  function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+      rect.bottom >= 0
+    );
+  }
+  
+  function checkVisibility() {
+    animatedElements.forEach(element => {
+      if (isElementInViewport(element)) {
+        // Obter valores de data attributes
+        const animation = element.getAttribute('data-aos') || 'fade-up';
+        const delay = element.getAttribute('data-aos-delay') || 0;
+        
+        // Adicionar classes de animação
+        setTimeout(() => {
+          element.classList.add('aos-animate', animation);
+        }, delay);
+        
+        // Marcar como já animado
+        element.setAttribute('data-aos-animated', 'true');
+      }
+    });
+  }
+  
+  // Aplicar classes iniciais aos elementos
+  animatedElements.forEach(element => {
+    // Adicionar classe base de animação
+    element.classList.add('aos-init');
+    
+    // Esconder inicialmente
+    element.style.opacity = '0';
+    
+    // Configurar transição
+    element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    
+    // Configurar transformação inicial com base no tipo de animação
+    const animation = element.getAttribute('data-aos');
+    if (animation === 'fade-up') {
+      element.style.transform = 'translateY(50px)';
+    } else if (animation === 'fade-down') {
+      element.style.transform = 'translateY(-50px)';
+    } else if (animation === 'fade-left') {
+      element.style.transform = 'translateX(-50px)';
+    } else if (animation === 'fade-right') {
+      element.style.transform = 'translateX(50px)';
+    } else if (animation === 'zoom-in') {
+      element.style.transform = 'scale(0.8)';
+    }
+  });
+  
+  // Adicionar classe de animação quando visível
+  window.addEventListener('load', checkVisibility);
+  window.addEventListener('scroll', checkVisibility);
+  window.addEventListener('resize', checkVisibility);
+  
+  // Verificar elementos na carga inicial
+  setTimeout(checkVisibility, 100);
+}
+
+// Efeitos de paralaxe para o fundo
+function initParallaxEffects() {
+  const servicesSection = document.querySelector('.lh-services');
+  const methodologySection = document.querySelector('.lh-methodology');
+  
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.pageYOffset;
+    
+    // Paralaxe para seção de serviços
+    if (servicesSection) {
+      const servicesBg = servicesSection.querySelector(':before');
+      if (servicesBg) {
+        const servicesSectionTop = servicesSection.offsetTop;
+        const servicesSectionHeight = servicesSection.offsetHeight;
+        const parallaxSpeed = 0.5;
+        
+        if (scrollPosition >= servicesSectionTop - window.innerHeight && 
+            scrollPosition <= servicesSectionTop + servicesSectionHeight) {
+          const yPos = (scrollPosition - servicesSectionTop) * parallaxSpeed;
+          servicesSection.style.backgroundPositionY = `${yPos}px`;
+        }
+      }
+    }
+  });
+}
+
+// Adicionar efeitos de hover para dispositivos touch
+function initTouchEffects() {
+  const cards = document.querySelectorAll('.lh-service-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('touchstart', function() {
+      // Remover hover de outros cards
+      cards.forEach(c => {
+        if (c !== card) c.classList.remove('touch-hover');
+      });
+      
+      // Toggle hover no card atual
+      this.classList.toggle('touch-hover');
+    });
+  });
+}
+
+// Animação de rolagem suave para links internos
+function initSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetId = this.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      
+      if (targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+}
+
+// Animação das cartas de serviço ao passar o mouse
+function initCardHoverEffects() {
+  const serviceCards = document.querySelectorAll('.lh-service-card');
+  
+  serviceCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      // Adicionar efeito de brilho 3D
+      card.addEventListener('mousemove', handleCardMove);
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      // Remover efeito ao sair
+      card.removeEventListener('mousemove', handleCardMove);
+      
+      // Resetar estilos
+      card.style.transform = 'translateY(-10px)';
+      const innerElements = card.querySelectorAll('.lh-service-icon, .lh-service-title');
+      innerElements.forEach(el => {
+        el.style.transform = 'translateZ(0)';
+      });
+    });
+    
+    function handleCardMove(e) {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenterX = cardRect.left + cardRect.width / 2;
+      const cardCenterY = cardRect.top + cardRect.height / 2;
+      
+      // Calcular distância do centro
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      
+      // Converter para valores entre -20 e 20
+      const rotateY = ((mouseX - cardCenterX) / (cardRect.width / 2)) * 5;
+      const rotateX = ((cardCenterY - mouseY) / (cardRect.height / 2)) * 5;
+      
+      // Aplicar rotação suave
+      card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      
+      // Mover elementos internos para criar efeito de profundidade
+      const innerElements = card.querySelectorAll('.lh-service-icon, .lh-service-title');
+      innerElements.forEach(el => {
+        el.style.transform = `translateZ(${50}px)`;
+      });
+    }
+  });
+}
+
+// Efeito de partículas no fundo da seção de metodologia
+function initParticlesBackground() {
+  const methodologySection = document.querySelector('.lh-methodology');
+  
+  if (!methodologySection) return;
+  
+  // Criar canvas para partículas
+  const canvas = document.createElement('canvas');
+  canvas.className = 'particles-canvas';
+  canvas.style.position = 'absolute';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '0';
+  
+  methodologySection.insertBefore(canvas, methodologySection.firstChild);
+  
+  // Configurar canvas
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = methodologySection.offsetWidth;
+  let height = canvas.height = methodologySection.offsetHeight;
+  
+  // Redimensionar canvas quando necessário
+  window.addEventListener('resize', () => {
+    width = canvas.width = methodologySection.offsetWidth;
+    height = canvas.height = methodologySection.offsetHeight;
+  });
+  
+  // Criar partículas
+  const particles = [];
+  const particleCount = 50;
+  const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
+  
+  for (let i = 0; i < particleCount; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 2 + 1,
+      color: primaryColor,
+      speed: Math.random() * 0.5 + 0.2,
+      direction: Math.random() * 360,
+      opacity: Math.random() * 0.5 + 0.1
+    });
+  }
+  
+  // Animar partículas
+  function animateParticles() {
+    ctx.clearRect(0, 0, width, height);
+    
+    particles.forEach(particle => {
+      // Mover partícula
+      const radians = particle.direction * Math.PI / 180;
+      particle.x += Math.cos(radians) * particle.speed;
+      particle.y += Math.sin(radians) * particle.speed;
+      
+      // Manter dentro dos limites
+      if (particle.x < 0) particle.x = width;
+      if (particle.x > width) particle.x = 0;
+      if (particle.y < 0) particle.y = height;
+      if (particle.y > height) particle.y = 0;
+      
+      // Desenhar partícula
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `${particle.color}${Math.floor(particle.opacity * 255).toString(16)}`;
+      ctx.fill();
+    });
+    
+    // Desenhar conexões entre partículas próximas
+    particles.forEach((particle, index) => {
+      for (let j = index + 1; j < particles.length; j++) {
+        const otherParticle = particles[j];
+        const dx = particle.x - otherParticle.x;
+        const dy = particle.y - otherParticle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          ctx.beginPath();
+          ctx.strokeStyle = `${particle.color}${Math.floor((1 - distance / 100) * 50).toString(16)}`;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(otherParticle.x, otherParticle.y);
+          ctx.stroke();
+        }
+      }
+    });
+    
+    requestAnimationFrame(animateParticles);
+  }
+  
+  // Iniciar animação
+  animateParticles();
+}
+
+// Inicializar todos os efeitos quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+  initServiceCards();
+  initMethodologyTimeline();
+  initNumberCounter();
+  initScrollAnimations();
+  initTouchEffects();
+  initSmoothScroll();
+  initCardHoverEffects();
+  initParticlesBackground();
+  
+  // Detectar quando as seções ficam visíveis para iniciar animações específicas
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Adicionar classe de visível para ativar animações CSS
+        entry.target.classList.add('section-visible');
+        
+        // Iniciar animações específicas para cada seção
+        if (entry.target.classList.contains('lh-methodology')) {
+          document.querySelector('.lh-progress-bar').style.width = '20%';
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+  
+  // Observar seções
+  document.querySelectorAll('.lh-services, .lh-methodology').forEach(section => {
+    observer.observe(section);
+  });
+});
+
+// Animação de digitação para o subtítulo na seção de serviços
+function initTypewriterEffect() {
+  const subtitles = document.querySelectorAll('.lh-section-subtitle');
+  
+  subtitles.forEach(subtitle => {
+    const originalText = subtitle.textContent;
+    subtitle.textContent = '';
+    
+    let charIndex = 0;
+    
+    function typeWriter() {
+      if (charIndex < originalText.length) {
+        subtitle.textContent += originalText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 50);
+      } else {
+        // Reiniciar após um período
+        setTimeout(() => {
+          subtitle.textContent = '';
+          charIndex = 0;
+          typeWriter();
+        }, 5000);
+      }
+    }
+    
+    // Iniciar animação quando o elemento ficar visível
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        typeWriter();
+        observer.disconnect();
+      }
+    });
+    
+    observer.observe(subtitle);
+  });
+}
+
+
+
+// JavaScript para gerenciar o carrossel e otimizar a reprodução de vídeos
+document.addEventListener('DOMContentLoaded', function() {
+  // Selecionar elementos
+  const track = document.querySelector('.slider-track');
+  const cards = document.querySelectorAll('.story-card');
+  const prevBtn = document.querySelector('.prev-arrow');
+  const nextBtn = document.querySelector('.next-arrow');
+  
+  // Calcular largura do card (incluindo margem)
+  const cardWidth = cards[0].offsetWidth + 20; // largura + gap
+  
+  // Posição inicial
+  let position = 0;
+  
+  // Função para obter o número de cards visíveis com base na largura da tela
+  const getVisibleCards = () => {
+    const containerWidth = track.parentElement.offsetWidth;
+    return Math.floor(containerWidth / cardWidth);
+  };
+  
+  // Função para mover para o próximo slide
+  function moveNext() {
+    const visibleCards = getVisibleCards();
+    if (position > -(cards.length - visibleCards) * cardWidth) {
+      position -= cardWidth;
+      track.style.transform = `translateX(${position}px)`;
+      pauseAllVideos();
+      // Reproduzir vídeos visíveis
+      playVisibleVideos();
+    }
+  }
+  
+  // Função para mover para o slide anterior
+  function movePrev() {
+    if (position < 0) {
+      position += cardWidth;
+      track.style.transform = `translateX(${position}px)`;
+      pauseAllVideos();
+      // Reproduzir vídeos visíveis
+      playVisibleVideos();
+    }
+  }
+  
+  // Adicionar event listeners aos botões
+  nextBtn.addEventListener('click', moveNext);
+  prevBtn.addEventListener('click', movePrev);
+  
+  // Função para verificar quais vídeos estão visíveis
+  function playVisibleVideos() {
+    const visibleCards = getVisibleCards();
+    const startIndex = Math.abs(Math.round(position / cardWidth));
+    const endIndex = startIndex + visibleCards;
+    
+    // Reproduzir apenas os vídeos visíveis
+    cards.forEach((card, index) => {
+      const iframe = card.querySelector('iframe');
+      if (index >= startIndex && index < endIndex) {
+        // Recarregar o iframe com autoplay
+        if (iframe) {
+          const src = iframe.src;
+          iframe.src = src;
+        }
+      }
+    });
+  }
+  
+  // Função para pausar todos os vídeos
+  function pauseAllVideos() {
+    cards.forEach(card => {
+      const iframe = card.querySelector('iframe');
+      if (iframe) {
+        // Pausar o vídeo removendo temporariamente o autoplay e recarregando
+        const src = iframe.src;
+        const newSrc = src.replace('autoplay=1', 'autoplay=0');
+        iframe.src = newSrc;
+      }
+    });
+  }
+  
+  // Reproduzir os vídeos visíveis inicialmente
+  playVisibleVideos();
+  
+  // Adicionar evento de redimensionamento para lidar com telas responsivas
+  window.addEventListener('resize', function() {
+    // Reiniciar a posição ao redimensionar
+    position = 0;
+    track.style.transform = `translateX(${position}px)`;
+    // Reproduzir vídeos visíveis
+    pauseAllVideos();
+    playVisibleVideos();
+  });
+  
+  // Interação com o usuário - clicar no card leva ao YouTube
+  cards.forEach(card => {
+    card.addEventListener('click', function(e) {
+      // Verificar se o clique foi no botão de play ou no overlay
+      if (e.target.closest('.story-play-btn') || e.target.closest('.story-overlay')) {
+        // Permitir que o link seja seguido
+        return;
+      }
+      
+      // Se o clique foi no card em si, abrir o link do YouTube
+      const link = this.querySelector('.story-link');
+      if (link) {
+        window.open(link.href, '_blank');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
